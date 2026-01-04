@@ -1,4 +1,4 @@
-package main
+package twentygo
 
 import (
 	"encoding/json"
