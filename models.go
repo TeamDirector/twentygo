@@ -4,10 +4,89 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/go-resty/resty/v2"
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
+
+type ErrorResponse struct {
+	StatusCode int      `json:"statusCode"`
+	Error      string   `json:"error"`
+	Messages   []string `json:"messages"`
+}
+
+type PageInfo struct {
+	HasNextPage bool   `json:"hasNextPage"`
+	StartCursor string `json:"startCursor"`
+	EndCursor   string `json:"endCursor"`
+}
+type Response struct {
+	Data       Data      `json:"data"`
+	PageInfo   *PageInfo `json:"pageInfo,omitempty"`
+	TotalCount *int      `json:"totalCount,omitempty"`
+}
+type Data struct {
+	Attachment          *Attachment    `json:"attachment,omitempty"`
+	Attachments         []*Attachment  `json:"attachments,omitempty"`
+	UpdateAttachment    *Attachment    `json:"updateAttachment,omitempty"`
+	UpdateAttachments   []*Attachment  `json:"updateAttachments,omitempty"`
+	CreateAttachment    *Attachment    `json:"createAttachment,omitempty"`
+	CreateAttachments   []*Attachment  `json:"createAttachments,omitempty"`
+	Person              *Person        `json:"person,omitempty"`
+	Persons             []*Person      `json:"persons,omitempty"`
+	UpdatePerson        *Person        `json:"updatePerson,omitempty"`
+	UpdatePersons       []*Person      `json:"updatePersons,omitempty"`
+	CreatePerson        *Person        `json:"createPerson,omitempty"`
+	CreatePersons       []*Person      `json:"createPersons,omitempty"`
+	Opportunity         *Opportunity   `json:"opportunity,omitempty"`
+	Opportunities       []*Opportunity `json:"opportunities,omitempty"`
+	UpdateOpportunity   *Opportunity   `json:"updateOpportunity,omitempty"`
+	UpdateOpportunities []*Opportunity `json:"updateOpportunities,omitempty"`
+	CreateOpportunity   *Opportunity   `json:"createOpportunity,omitempty"`
+	CreateOpportunities []*Opportunity `json:"createOpportunities,omitempty"`
+}
+
+// APIErrType is a field containing more specific API error types
+// that may be checked by the receiver.
+type APIErrType string
+
+const (
+	// APIErrTypeUnknown is for API errors that are not strongly
+	// typed.
+	APIErrTypeUnknown APIErrType = "unknown"
+
+	// APIErrTypeInvalidGrant corresponds with Keycloak's
+	// OAuthErrorException due to "invalid_grant".
+	APIErrTypeInvalidGrant = "oauth: invalid grant"
+)
+
+// ParseAPIErrType is a convenience method for returning strongly
+// typed API errors.
+func ParseAPIErrType(err error) APIErrType {
+	if err == nil {
+		return APIErrTypeUnknown
+	}
+	switch {
+	case strings.Contains(err.Error(), "invalid_grant"):
+		return APIErrTypeInvalidGrant
+	default:
+		return APIErrTypeUnknown
+	}
+}
+
+// APIError holds message and statusCode for api errors
+type APIError struct {
+	Code    int        `json:"code"`
+	Message string     `json:"message"`
+	Type    APIErrType `json:"type"`
+}
+
+// Error stringifies the APIError
+func (apiError APIError) Error() string {
+	return apiError.Message
+}
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -29,7 +108,7 @@ type Client struct {
 
 	// Doer for performing requests, typically a *http.Client with any
 	// customized settings, such as certificate chains.
-	Client HttpRequestDoer
+	RestyClient *resty.Client
 
 	// A list of callbacks for modifying requests which are generated before sending over
 	// the network.
@@ -5127,6 +5206,21 @@ type OpportunityForUpdateLostReason string
 // OpportunityForUpdateStage Opportunity stage
 type OpportunityForUpdateStage string
 
+type PersonName struct {
+	FirstName *string `json:"firstName,omitempty"`
+	LastName  *string `json:"lastName,omitempty"`
+}
+type PersonEmails struct {
+	AdditionalEmails *[]openapi_types.Email `json:"additionalEmails,omitempty"`
+	PrimaryEmail     *string                `json:"primaryEmail,omitempty"`
+}
+type PersonPhones struct {
+	AdditionalPhones        *[]string `json:"additionalPhones,omitempty"`
+	PrimaryPhoneCallingCode *string   `json:"primaryPhoneCallingCode,omitempty"`
+	PrimaryPhoneCountryCode *string   `json:"primaryPhoneCountryCode,omitempty"`
+	PrimaryPhoneNumber      *string   `json:"primaryPhoneNumber,omitempty"`
+}
+
 // Person A person
 type Person struct {
 	// AvatarUrl Contact’s avatar
@@ -5142,10 +5236,7 @@ type Person struct {
 	} `json:"createdBy,omitempty"`
 
 	// Emails Contact’s Emails
-	Emails *struct {
-		AdditionalEmails *[]openapi_types.Email `json:"additionalEmails,omitempty"`
-		PrimaryEmail     *string                `json:"primaryEmail,omitempty"`
-	} `json:"emails,omitempty"`
+	Emails *PersonEmails `json:"emails,omitempty"`
 
 	// JobTitle Contact’s job title
 	JobTitle   *string `json:"jobTitle,omitempty"`
@@ -5162,19 +5253,11 @@ type Person struct {
 	} `json:"linkedinLink,omitempty"`
 
 	// Name Contact’s name
-	Name *struct {
-		FirstName *string `json:"firstName,omitempty"`
-		LastName  *string `json:"lastName,omitempty"`
-	} `json:"name,omitempty"`
-	Newsletter *bool `json:"newsletter,omitempty"`
+	Name       *PersonName `json:"name,omitempty"`
+	Newsletter *bool       `json:"newsletter,omitempty"`
 
 	// Phones Contact’s phone numbers
-	Phones *struct {
-		AdditionalPhones        *[]string `json:"additionalPhones,omitempty"`
-		PrimaryPhoneCallingCode *string   `json:"primaryPhoneCallingCode,omitempty"`
-		PrimaryPhoneCountryCode *string   `json:"primaryPhoneCountryCode,omitempty"`
-		PrimaryPhoneNumber      *string   `json:"primaryPhoneNumber,omitempty"`
-	} `json:"phones,omitempty"`
+	Phones *PersonPhones `json:"phones,omitempty"`
 
 	// Position Person record Position
 	Position *float32 `json:"position,omitempty"`
