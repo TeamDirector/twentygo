@@ -41,7 +41,11 @@ func (c *Client) GetRestURL(path ...string) string {
 	return makeURL(path...)
 }
 
-func (c *Client) DeleteManyAttachments(ctx context.Context, token string, params *DeleteManyAttachmentsParams) error {
+///////////////////////////
+//      Attachments      //
+///////////////////////////
+
+func (c *Client) DeleteManyAttachments(ctx context.Context, token string, params *DeleteManyParams) error {
 	const errMessage = "could not delete many attachements"
 
 	queryParams, err := GetQueryParams(params)
@@ -51,7 +55,7 @@ func (c *Client) DeleteManyAttachments(ctx context.Context, token string, params
 
 	resp, err := c.GetRequestWithBearerAuth(ctx, token).
 		SetQueryParams(queryParams).
-		Delete(c.GetRestURL(c.Server, "attachments"))
+		Delete(c.GetRestURL("attachments"))
 
 	if err := checkForError(resp, err, errMessage); err != nil {
 		return err
@@ -60,7 +64,7 @@ func (c *Client) DeleteManyAttachments(ctx context.Context, token string, params
 	return nil
 }
 
-func (c *Client) FindManyAttachments(ctx context.Context, token string, params *FindManyAttachmentsParams) ([]*Attachment, error) {
+func (c *Client) FindManyAttachments(ctx context.Context, token string, params *FindManyParams) ([]*Attachment, error) {
 	const errMessage = "could not find many attachements"
 
 	var response Response
@@ -81,7 +85,7 @@ func (c *Client) FindManyAttachments(ctx context.Context, token string, params *
 	return response.Data.Attachments, nil
 }
 
-func (c *Client) UpdateManyAttachments(ctx context.Context, token string, params *UpdateManyAttachmentsParams, body UpdateManyAttachmentsJSONRequestBody) ([]*Attachment, error) {
+func (c *Client) UpdateManyAttachments(ctx context.Context, token string, params *UpdateManyParams, body NewAttachment) ([]*Attachment, error) {
 	const errMessage = "could not update many attachements"
 
 	var response Response
@@ -103,7 +107,7 @@ func (c *Client) UpdateManyAttachments(ctx context.Context, token string, params
 	return response.Data.UpdateAttachments, nil
 }
 
-func (c *Client) CreateOneAttachment(ctx context.Context, token string, params *CreateOneAttachmentParams, body CreateOneAttachmentJSONRequestBody) (*Attachment, error) {
+func (c *Client) CreateOneAttachment(ctx context.Context, token string, params *CreateOneParams, body NewAttachment) (*Attachment, error) {
 	const errMessage = "could not create attachements"
 
 	var response Response
@@ -125,7 +129,7 @@ func (c *Client) CreateOneAttachment(ctx context.Context, token string, params *
 	return response.Data.CreateAttachment, nil
 }
 
-func (c *Client) DeleteOneAttachment(ctx context.Context, token string, id string, params *DeleteOneAttachmentParams) error {
+func (c *Client) DeleteOneAttachment(ctx context.Context, token string, id string, params *DeleteOneParams) error {
 	const errMessage = "could not delete attachement"
 
 	queryParams, err := GetQueryParams(params)
@@ -144,7 +148,7 @@ func (c *Client) DeleteOneAttachment(ctx context.Context, token string, id strin
 	return nil
 }
 
-func (c *Client) FindOneAttachment(ctx context.Context, token string, id string, params *FindOneAttachmentParams) (*Attachment, error) {
+func (c *Client) FindOneAttachment(ctx context.Context, token string, id string, params *FindOneParams) (*Attachment, error) {
 	const errMessage = "could not find attachement"
 
 	var response Response
@@ -165,7 +169,7 @@ func (c *Client) FindOneAttachment(ctx context.Context, token string, id string,
 	return response.Data.Attachment, nil
 }
 
-func (c *Client) UpdateOneAttachment(ctx context.Context, token string, id string, params *UpdateOneAttachmentParams, body UpdateOneAttachmentJSONRequestBody) (*Attachment, error) {
+func (c *Client) UpdateOneAttachment(ctx context.Context, token string, id string, params *UpdateOneParams, body NewAttachment) (*Attachment, error) {
 	const errMessage = "could not update attachement"
 
 	var response Response
@@ -187,7 +191,7 @@ func (c *Client) UpdateOneAttachment(ctx context.Context, token string, id strin
 	return response.Data.UpdateAttachment, nil
 }
 
-func (c *Client) CreateManyAttachments(ctx context.Context, token string, params *CreateManyAttachmentsParams, attachments []UpdateOneAttachmentJSONRequestBody) ([]*Attachment, error) {
+func (c *Client) CreateManyAttachments(ctx context.Context, token string, params *CreateManyParams, attachments []NewAttachment) ([]*Attachment, error) {
 	const errMessage = "could not create many attachements"
 
 	var response Response
@@ -200,7 +204,7 @@ func (c *Client) CreateManyAttachments(ctx context.Context, token string, params
 		SetQueryParams(queryParams).
 		SetBody(attachments).
 		SetResult(&response).
-		Post(c.GetRestURL("attachments"))
+		Post(c.GetRestURL("batch", "attachments"))
 
 	if err := checkForError(resp, err, errMessage); err != nil {
 		return nil, err
@@ -209,7 +213,11 @@ func (c *Client) CreateManyAttachments(ctx context.Context, token string, params
 	return response.Data.CreateAttachments, nil
 }
 
-func (c *Client) DeleteOnePerson(ctx context.Context, token string, id string, params *DeleteOnePersonParams) error {
+/////////////////////////
+//      Persons        //
+/////////////////////////
+
+func (c *Client) DeleteOnePerson(ctx context.Context, token string, id string, params *DeleteOneParams) error {
 	const errMessage = "could not delete person"
 
 	queryParams, err := GetQueryParams(params)
@@ -228,7 +236,7 @@ func (c *Client) DeleteOnePerson(ctx context.Context, token string, id string, p
 	return nil
 }
 
-func (c *Client) FindOnePerson(ctx context.Context, token string, id string, params *FindOnePersonParams) (*Person, error) {
+func (c *Client) FindOnePerson(ctx context.Context, token string, id string, params *FindOneParams) (*Person, error) {
 	const errMessage = "could not find person"
 
 	var response Response
@@ -249,7 +257,7 @@ func (c *Client) FindOnePerson(ctx context.Context, token string, id string, par
 	return response.Data.Person, nil
 }
 
-func (c *Client) DeleteManyPeople(ctx context.Context, token string, params *DeleteManyPeopleParams) error {
+func (c *Client) DeleteManyPeople(ctx context.Context, token string, params *DeleteManyParams) error {
 	const errMessage = "could not delete person"
 
 	queryParams, err := GetQueryParams(params)
@@ -268,7 +276,7 @@ func (c *Client) DeleteManyPeople(ctx context.Context, token string, params *Del
 	return nil
 }
 
-func (c *Client) FindManyPeople(ctx context.Context, token string, params *FindManyPeopleParams) ([]*Person, error) {
+func (c *Client) FindManyPeople(ctx context.Context, token string, params *FindManyParams) ([]*Person, error) {
 	const errMessage = "could not find persons"
 
 	var response Response
@@ -289,7 +297,7 @@ func (c *Client) FindManyPeople(ctx context.Context, token string, params *FindM
 	return response.Data.Persons, nil
 }
 
-func (c *Client) UpdateManyPeople(ctx context.Context, token string, params *UpdateManyPeopleParams, body Person) ([]*Person, error) {
+func (c *Client) UpdateManyPeople(ctx context.Context, token string, params *UpdateManyParams, body NewPerson) ([]*Person, error) {
 	const errMessage = "could not update many persons"
 
 	var response Response
@@ -311,7 +319,7 @@ func (c *Client) UpdateManyPeople(ctx context.Context, token string, params *Upd
 	return response.Data.UpdatePersons, nil
 }
 
-func (c *Client) UpdateOnePerson(ctx context.Context, token string, id string, params *UpdateOnePersonParams, body Person) (*Person, error) {
+func (c *Client) UpdateOnePerson(ctx context.Context, token string, id string, params *UpdateOneParams, body NewPerson) (*Person, error) {
 	const errMessage = "could not update person"
 
 	var response Response
@@ -333,7 +341,7 @@ func (c *Client) UpdateOnePerson(ctx context.Context, token string, id string, p
 	return response.Data.UpdatePerson, nil
 }
 
-func (c *Client) CreateManyPeople(ctx context.Context, token string, params *CreateManyPeopleParams, body []Person) ([]*Person, error) {
+func (c *Client) CreateManyPeople(ctx context.Context, token string, params *CreateManyParams, body []NewPerson) ([]*Person, error) {
 	const errMessage = "could not create persons"
 
 	var response Response
@@ -346,7 +354,7 @@ func (c *Client) CreateManyPeople(ctx context.Context, token string, params *Cre
 		SetQueryParams(queryParams).
 		SetBody(body).
 		SetResult(&response).
-		Post(c.GetRestURL("people"))
+		Post(c.GetRestURL("batch", "people"))
 
 	if err := checkForError(resp, err, errMessage); err != nil {
 		return nil, err
@@ -355,7 +363,7 @@ func (c *Client) CreateManyPeople(ctx context.Context, token string, params *Cre
 	return response.Data.CreatePersons, nil
 }
 
-func (c *Client) CreateOnePerson(ctx context.Context, token string, params *CreateOnePersonParams, body Person) (*Person, error) {
+func (c *Client) CreateOnePerson(ctx context.Context, token string, params *CreateOneParams, body NewPerson) (*Person, error) {
 	const errMessage = "could not create person"
 
 	var response Response
@@ -377,7 +385,11 @@ func (c *Client) CreateOnePerson(ctx context.Context, token string, params *Crea
 	return response.Data.CreatePerson, nil
 }
 
-func (c *Client) DeleteManyOpportunities(ctx context.Context, token string, params *DeleteManyOpportunitiesParams) error {
+/////////////////////////////
+//      Opportunities      //
+/////////////////////////////
+
+func (c *Client) DeleteManyOpportunities(ctx context.Context, token string, params *DeleteManyParams) error {
 	const errMessage = "could not delete many opportunities"
 
 	queryParams, err := GetQueryParams(params)
@@ -396,7 +408,7 @@ func (c *Client) DeleteManyOpportunities(ctx context.Context, token string, para
 	return nil
 }
 
-func (c *Client) DeleteOneOpportunity(ctx context.Context, token string, id string, params *DeleteOneOpportunityParams) error {
+func (c *Client) DeleteOneOpportunity(ctx context.Context, token string, id string, params *DeleteOneParams) error {
 	const errMessage = "could not delete opportunity"
 
 	queryParams, err := GetQueryParams(params)
@@ -415,7 +427,7 @@ func (c *Client) DeleteOneOpportunity(ctx context.Context, token string, id stri
 	return nil
 }
 
-func (c *Client) FindOneOpportunity(ctx context.Context, token string, id string, params *FindOneOpportunityParams) (*Opportunity, error) {
+func (c *Client) FindOneOpportunity(ctx context.Context, token string, id string, params *FindOneParams) (*Opportunity, error) {
 	const errMessage = "could not find opportunity"
 
 	var response Response
@@ -436,7 +448,7 @@ func (c *Client) FindOneOpportunity(ctx context.Context, token string, id string
 	return response.Data.Opportunity, nil
 }
 
-func (c *Client) FindManyOpportunities(ctx context.Context, token string, params *FindManyOpportunitiesParams) ([]*Opportunity, error) {
+func (c *Client) FindManyOpportunities(ctx context.Context, token string, params *FindManyParams) ([]*Opportunity, error) {
 	const errMessage = "could not find opportunities"
 
 	var response Response
@@ -457,7 +469,7 @@ func (c *Client) FindManyOpportunities(ctx context.Context, token string, params
 	return response.Data.Opportunities, nil
 }
 
-func (c *Client) UpdateManyOpportunities(ctx context.Context, token string, params *UpdateManyOpportunitiesParams, body Opportunity) ([]*Opportunity, error) {
+func (c *Client) UpdateManyOpportunities(ctx context.Context, token string, params *UpdateManyParams, body NewOpportunity) ([]*Opportunity, error) {
 	const errMessage = "could not update many opportunities"
 
 	var response Response
@@ -479,7 +491,7 @@ func (c *Client) UpdateManyOpportunities(ctx context.Context, token string, para
 	return response.Data.UpdateOpportunities, nil
 }
 
-func (c *Client) UpdateOneOpportunity(ctx context.Context, token string, id string, params *UpdateOneOpportunityParams, body Opportunity) (*Opportunity, error) {
+func (c *Client) UpdateOneOpportunity(ctx context.Context, token string, id string, params *UpdateOneParams, body NewOpportunity) (*Opportunity, error) {
 	const errMessage = "could not update opportunity"
 
 	var response Response
@@ -501,7 +513,7 @@ func (c *Client) UpdateOneOpportunity(ctx context.Context, token string, id stri
 	return response.Data.UpdateOpportunity, nil
 }
 
-func (c *Client) CreateOneOpportunity(ctx context.Context, token string, params *CreateOneOpportunityParams, body Opportunity) (*Opportunity, error) {
+func (c *Client) CreateOneOpportunity(ctx context.Context, token string, params *CreateOneParams, body NewOpportunity) (*Opportunity, error) {
 	const errMessage = "could not create opportunity"
 
 	var response Response
@@ -523,7 +535,7 @@ func (c *Client) CreateOneOpportunity(ctx context.Context, token string, params 
 	return response.Data.CreateOpportunity, nil
 }
 
-func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params *CreateManyOpportunitiesParams, body []Opportunity) ([]*Opportunity, error) {
+func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params *CreateManyParams, body []NewOpportunity) ([]*Opportunity, error) {
 	const errMessage = "could not create many opportunities"
 
 	var response Response
@@ -536,13 +548,358 @@ func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params
 		SetQueryParams(queryParams).
 		SetResult(&response).
 		SetBody(body).
-		Post(c.GetRestURL("opportunities"))
+		Post(c.GetRestURL("batch", "opportunities"))
 
 	if err := checkForError(resp, err, errMessage); err != nil {
 		return nil, err
 	}
 
 	return response.Data.CreateOpportunities, nil
+}
+
+/////////////////////////
+//      Companies      //
+/////////////////////////
+
+func (c *Client) FindManyCompanies(ctx context.Context, token string, params *FindManyParams) ([]*Company, error) {
+	const errMessage = "could not find many companies"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		Get(c.GetRestURL("companies"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.Companies, nil
+}
+
+func (c *Client) FindOneCompany(ctx context.Context, token string, id string, params *FindOneParams) (*Company, error) {
+	const errMessage = "could not find company"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		Get(c.GetRestURL("companies", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.Company, nil
+}
+
+func (c *Client) DeleteOneCompany(ctx context.Context, token string, id string, params *DeleteOneParams) error {
+	const errMessage = "could not delete company"
+
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		Delete(c.GetRestURL("companies", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) DeleteManyCompanies(ctx context.Context, token string, params *DeleteManyParams) error {
+	const errMessage = "could not delete many companies"
+
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		Delete(c.GetRestURL("companies"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) CreateOneCompany(ctx context.Context, token string, params *CreateOneParams, body NewCompany) (*Company, error) {
+	const errMessage = "could not create company"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Post(c.GetRestURL("companies"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.CreateCompany, nil
+}
+
+func (c *Client) CreateManyCompanies(ctx context.Context, token string, params *CreateManyParams, body []NewCompany) ([]*Company, error) {
+	const errMessage = "could not create many companies"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetHeader("Content-Type", "application/json").
+		SetBody(body).
+		Post(c.GetRestURL("batch", "companies"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.CreateCompanies, nil
+}
+
+func (c *Client) UpdateOneCompany(ctx context.Context, token string, id string, params *UpdateOneParams, body NewCompany) (*Company, error) {
+	const errMessage = "could not upodate company"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Patch(c.GetRestURL("companies", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.UpdateCompany, nil
+}
+
+func (c *Client) UpdateManyCompanies(ctx context.Context, token string, params *UpdateManyParams, body NewCompany) ([]*Company, error) {
+	const errMessage = "could not update many companies"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Patch(c.GetRestURL("companies"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.UpdateCompanies, nil
+}
+
+/////////////////////////
+//      Tasks          //
+/////////////////////////
+
+func (c *Client) FindManyTasks(ctx context.Context, token string, params *FindManyParams) ([]*Task, error) {
+	const errMessage = "could not find many tasks"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		Get(c.GetRestURL("tasks"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.Tasks, nil
+}
+
+func (c *Client) FindOneTask(ctx context.Context, token string, id string, params *FindOneParams) (*Task, error) {
+	const errMessage = "could not find task"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		Get(c.GetRestURL("tasks", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.Task, nil
+}
+
+func (c *Client) CreateOneTask(ctx context.Context, token string, params *CreateOneParams, body NewTask) (*Task, error) {
+	const errMessage = "could not create task"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Post(c.GetRestURL("tasks"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.CreateTask, nil
+}
+
+func (c *Client) CreateManyTasks(ctx context.Context, token string, params *CreateManyParams, body []NewTask) ([]*Task, error) {
+	const errMessage = "could not create many tasks"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Post(c.GetRestURL("batch", "tasks"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.CreateTasks, nil
+}
+
+func (c *Client) UpdateOneTask(ctx context.Context, token string, id string, params *UpdateOneParams, body NewTask) (*Task, error) {
+	const errMessage = "could not upodate task"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Patch(c.GetRestURL("tasks", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.UpdateTask, nil
+}
+
+func (c *Client) UpdateManyTasks(ctx context.Context, token string, params *UpdateManyParams, body NewTask) ([]*Task, error) {
+	const errMessage = "could not update many tasks"
+
+	var response Response
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		SetResult(&response).
+		SetBody(body).
+		Patch(c.GetRestURL("tasks"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return response.Data.UpdateTasks, nil
+}
+
+func (c *Client) DeleteManyTasks(ctx context.Context, token string, params *DeleteManyParams) error {
+	const errMessage = "could not delete many tasks"
+
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		Delete(c.GetRestURL("tasks"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) DeleteOneTask(ctx context.Context, token string, id string, params *DeleteOneParams) error {
+	const errMessage = "could not delete task"
+
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return WrapError(err, errMessage)
+	}
+
+	resp, err := c.GetRequestWithBearerAuth(ctx, token).
+		SetQueryParams(queryParams).
+		Delete(c.GetRestURL("tasks", id))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // func (c *Client) CreateManyBlocklistsWithBody(ctx context.Context, token string, params *CreateManyBlocklistsParams, contentType string, body io.Reader) (*http.Response, error) {
@@ -5225,18 +5582,6 @@ func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params
 // 	return c.Client.Do(req)
 // }
 
-// func (c *Client) UpdateManyTasksWithBody(ctx context.Context, token string, params *UpdateManyTasksParams, contentType string, body io.Reader) (*http.Response, error) {
-// 	req, err := NewUpdateManyTasksRequestWithBody(c.Server, params, contentType, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
 // func (c *Client) UpdateManyTasks(ctx context.Context, token string, params *UpdateManyTasksParams, body UpdateManyTasksJSONRequestBody) (*http.Response, error) {
 // 	req, err := NewUpdateManyTasksRequest(c.Server, params, body)
 // 	if err != nil {
@@ -5249,68 +5594,8 @@ func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params
 // 	return c.Client.Do(req)
 // }
 
-// func (c *Client) CreateOneTaskWithBody(ctx context.Context, token string, params *CreateOneTaskParams, contentType string, body io.Reader) (*http.Response, error) {
-// 	req, err := NewCreateOneTaskRequestWithBody(c.Server, params, contentType, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
 // func (c *Client) CreateOneTask(ctx context.Context, token string, params *CreateOneTaskParams, body CreateOneTaskJSONRequestBody) (*http.Response, error) {
 // 	req, err := NewCreateOneTaskRequest(c.Server, params, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
-// func (c *Client) FindTaskDuplicatesWithBody(ctx context.Context, token string, params *FindTaskDuplicatesParams, contentType string, body io.Reader) (*http.Response, error) {
-// 	req, err := NewFindTaskDuplicatesRequestWithBody(c.Server, params, contentType, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
-// func (c *Client) FindTaskDuplicates(ctx context.Context, token string, params *FindTaskDuplicatesParams, body FindTaskDuplicatesJSONRequestBody) (*http.Response, error) {
-// 	req, err := NewFindTaskDuplicatesRequest(c.Server, params, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
-// func (c *Client) MergeManyTasksWithBody(ctx context.Context, token string, params *MergeManyTasksParams, contentType string, body io.Reader) (*http.Response, error) {
-// 	req, err := NewMergeManyTasksRequestWithBody(c.Server, params, contentType, body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
-// func (c *Client) MergeManyTasks(ctx context.Context, token string, params *MergeManyTasksParams, body MergeManyTasksJSONRequestBody) (*http.Response, error) {
-// 	req, err := NewMergeManyTasksRequest(c.Server, params, body)
 // 	if err != nil {
 // 		return nil, err
 // 	}
@@ -5335,18 +5620,6 @@ func (c *Client) CreateManyOpportunity(ctx context.Context, token string, params
 
 // func (c *Client) FindOneTask(ctx context.Context, id IdPath, params *FindOneTaskParams) (*http.Response, error) {
 // 	req, err := NewFindOneTaskRequest(c.Server, id, params)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	req = req.WithContext(ctx)
-// 	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-// 		return nil, err
-// 	}
-// 	return c.Client.Do(req)
-// }
-
-// func (c *Client) UpdateOneTaskWithBody(ctx context.Context, id IdPath, params *UpdateOneTaskParams, contentType string, body io.Reader) (*http.Response, error) {
-// 	req, err := NewUpdateOneTaskRequestWithBody(c.Server, id, params, contentType, body)
 // 	if err != nil {
 // 		return nil, err
 // 	}
