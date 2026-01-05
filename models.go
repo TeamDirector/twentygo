@@ -1076,11 +1076,11 @@ type NewOpportunity struct {
 	Position *float32 `json:"position,omitempty"`
 
 	// Stage Opportunity stage
-	Stage              *OpportunityStage   `json:"stage,omitempty"`
-	SubscriptionActive *bool               `json:"subscriptionActive,omitempty"`
-	SubscriptionAmount *int                `json:"subscriptionAmount,omitempty"`
-	SubscriptionEnd    *openapi_types.Date `json:"subscriptionEnd,omitempty"`
-	SubscriptionStart  *openapi_types.Date `json:"subscriptionStart,omitempty"`
+	Stage              *OpportunityStage `json:"stage,omitempty"`
+	SubscriptionActive *bool             `json:"subscriptionActive,omitempty"`
+	SubscriptionAmount *int              `json:"subscriptionAmount,omitempty"`
+	SubscriptionEnd    *string           `json:"subscriptionEnd,omitempty"`
+	SubscriptionStart  *string           `json:"subscriptionStart,omitempty"`
 }
 
 // OpportunityLostReason defines model for Opportunity.LostReason.
@@ -1138,11 +1138,11 @@ type Opportunity struct {
 	Position *float32 `json:"position,omitempty"`
 
 	// Stage Opportunity stage
-	Stage              *OpportunityStage   `json:"stage,omitempty"`
-	SubscriptionActive *bool               `json:"subscriptionActive,omitempty"`
-	SubscriptionAmount *int                `json:"subscriptionAmount,omitempty"`
-	SubscriptionEnd    *openapi_types.Date `json:"subscriptionEnd,omitempty"`
-	SubscriptionStart  *openapi_types.Date `json:"subscriptionStart,omitempty"`
+	Stage              *OpportunityStage `json:"stage,omitempty"`
+	SubscriptionActive *bool             `json:"subscriptionActive,omitempty"`
+	SubscriptionAmount *int              `json:"subscriptionAmount,omitempty"`
+	SubscriptionEnd    *string           `json:"subscriptionEnd,omitempty"`
+	SubscriptionStart  *string           `json:"subscriptionStart,omitempty"`
 
 	// TaskTargets Tasks tied to the opportunity
 	TaskTargets *[]TaskTarget `json:"taskTargets,omitempty"`
