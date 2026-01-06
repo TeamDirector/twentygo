@@ -21,7 +21,7 @@ type RestoreManyParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 // RestoreOneParams defines parameters for RestoreOne functions.
@@ -29,7 +29,7 @@ type RestoreOneParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 // FindDuplicatesBody defines parameters for FindDuplicates functions.
@@ -55,7 +55,7 @@ type FindDuplicatesParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 // MergeManyParams defines parameters for MergeMany functions.
@@ -63,7 +63,7 @@ type MergeManyParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 // CreateManyParams defines parameters for CreateMany functions.
@@ -71,7 +71,7 @@ type CreateManyParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 
 	// Upsert If true, creates the object or updates it if it already exists.
 	Upsert *bool `form:"upsert,omitempty" json:"upsert,omitempty"`
@@ -91,19 +91,19 @@ type DeleteManyParams struct {
 type FindManyParams struct {
 	// OrderBy Format: **field_name_1,field_name_2[DIRECTION_2]
 	//     Refer to the filter section at the top of the page for more details.
-	OrderBy *int `form:"order_by,omitempty" json:"order_by,omitempty"`
+	OrderBy *string `form:"order_by,omitempty" json:"order_by,omitempty"`
 
 	// Filter Format: field[COMPARATOR]:value,field2[COMPARATOR]:value2
 	//     Refer to the filter section at the top of the page for more details.
 	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
 
 	// Limit Limits the number of objects returned.
-	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+	Limit *int `form:"limit,omitempty" json:"limit,string,omitempty"`
 
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 
 	// StartingAfter Returns objects starting after a specific cursor. You can find cursors in **startCursor** and **endCursor** in **pageInfo** in response data
 	StartingAfter *string `form:"starting_after,omitempty" json:"starting_after,omitempty"`
@@ -117,7 +117,7 @@ type UpdateManyParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 
 	// Filter Format: field[COMPARATOR]:value,field2[COMPARATOR]:value2
 	//     Refer to the filter section at the top of the page for more details.
@@ -129,7 +129,7 @@ type CreateOneParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 
 	// Upsert If true, creates the object or updates it if it already exists.
 	Upsert *bool `form:"upsert,omitempty" json:"upsert,omitempty"`
@@ -146,7 +146,7 @@ type FindOneParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 // UpdateOneParams defines parameters for UpdateOne functions.
@@ -154,7 +154,7 @@ type UpdateOneParams struct {
 	// Depth Determines the level of nested related objects to include in the response.
 	//     - 0: Primary object only
 	//     - 1: Primary object + direct relations
-	Depth *int `form:"depth,omitempty" json:"depth,omitempty"`
+	Depth *int `form:"depth,omitempty" json:"depth,string,omitempty"`
 }
 
 ////////////////////////////
